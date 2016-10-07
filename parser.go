@@ -97,30 +97,35 @@ func (n *Node) Parse(line string, param *Param) (int, Callback, []interface{}, C
 
 	// Skip trailing white space.
 	pos := state.pos
+	match := state.match
+	node := state.node
 	for ; state.pos < len(line); state.pos++ {
 		if !isWhiteSpace(line, state.pos) {
 			break
 		}
 	}
 	if pos != state.pos {
+		pos = state.pos
 		if state.node.Hook != nil {
 			if hook, ok := state.node.Hook.(func(*Param) (int, Callback, []interface{}, CompSlice)); ok {
 				return hook(param)
 			}
 		}
-		state.comps = state.comps[:0]
-		state.node.ParseMatch(line[pos:], param, state)
-	}
-	line = line[state.pos:]
-
-	if len(line) == 0 {
-		if state.node.Fn == nil || state.match == MatchTypeIncomplete {
-			return ParseIncomplete, nil, nil, state.comps
-		} else {
-			return ParseSuccess, state.node.Fn, param.Args, state.comps
+		if param.Complete {
+			state.comps = state.comps[:0]
+			state.node.ParseMatch(line[pos:], param, state)
 		}
 	}
-	return state.node.Parse(line, param)
+	line = line[pos:]
+
+	if len(line) == 0 {
+		if node.Fn == nil || match == MatchTypeIncomplete {
+			return ParseIncomplete, nil, nil, state.comps
+		} else {
+			return ParseSuccess, node.Fn, param.Args, state.comps
+		}
+	}
+	return node.Parse(line, param)
 }
 
 func (n *Node) ParseCmd(cmd []string, args ...*Param) (int, Callback, []interface{}, CompSlice) {

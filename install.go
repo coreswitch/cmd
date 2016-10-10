@@ -45,7 +45,7 @@ func (ns NodeSlice) setHook(hook Hook) {
 
 func (ns NodeSlice) lookup(typ NodeType, name string) *Node {
 	for _, n := range ns {
-		for _, m := range n.Nodes {
+		for _, m := range *n.Nodes {
 			if m.Type == typ && m.Name == name {
 				return m
 			}
@@ -56,12 +56,14 @@ func (ns NodeSlice) lookup(typ NodeType, name string) *Node {
 
 func (ns NodeSlice) add(node *Node) {
 	for _, n := range ns {
-		n.Nodes = append(n.Nodes, node)
+		*n.Nodes = append(*n.Nodes, node)
 	}
 }
 
-func NewNode(typ NodeType, lit string) *Node {
-	node := &Node{Type: typ, Name: lit}
+func NewNodeType(typ NodeType, lit string) *Node {
+	node := NewNode()
+	node.Type = typ
+	node.Name = lit
 
 	if typ == NodeRange {
 		p := strings.IndexByte(lit, '-')
@@ -127,7 +129,7 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 			}
 			node := parent.lookup(typ, lit)
 			if node == nil {
-				node = NewNode(typ, lit)
+				node = NewNodeType(typ, lit)
 				parent.add(node)
 			}
 			if param.HelpIndex < len(param.Helps) {

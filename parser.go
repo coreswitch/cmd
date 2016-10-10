@@ -28,7 +28,7 @@ const (
 )
 
 func NewParser() *Node {
-	return &Node{}
+	return NewNode()
 }
 
 func String2Interface(strs []string) []interface{} {
@@ -67,7 +67,7 @@ func (n *Node) ParseArgSet(str string, param *Param) {
 }
 
 func (n *Node) ParseMatch(line string, param *Param, state *MatchState) {
-	for _, node := range n.Nodes {
+	for _, node := range *n.Nodes {
 		if param.Privilege > 0 && node.Privilege < param.Privilege {
 			continue
 		}

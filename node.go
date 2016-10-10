@@ -25,7 +25,7 @@ type Node struct {
 	Privilege uint32
 	Fn        Callback
 	Hook      Hook
-	Nodes     NodeSlice
+	Nodes     *NodeSlice
 	Min       uint64
 	Max       uint64
 	Module    string
@@ -87,6 +87,23 @@ var string2NodeType = map[string]NodeType{
 
 var String2NodeTypeMap = map[string]NodeType{}
 
+func NewNode() *Node {
+	return &Node{Nodes: &NodeSlice{}}
+}
+
+func (n *Node) Lookup(name string) *Node {
+	for _, node := range *n.Nodes {
+		if node.Name == name {
+			return node
+		}
+	}
+	return nil
+}
+
+func (n *Node) LinkNodes(node *Node) {
+	n.Nodes = node.Nodes
+}
+
 func (n *Node) String() string {
 	switch n.Type {
 	case NodeKeyword, NodeDynamic:
@@ -108,13 +125,13 @@ func (n *Node) DumpNode(depth int) {
 		fmt.Printf(" (*)")
 	}
 	fmt.Printf("\n")
-	for _, node := range n.Nodes {
+	for _, node := range *n.Nodes {
 		node.DumpNode(depth + 1)
 	}
 }
 
 func (p *Node) Dump() {
-	for _, node := range p.Nodes {
+	for _, node := range *p.Nodes {
 		node.DumpNode(0)
 	}
 }

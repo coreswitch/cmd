@@ -58,7 +58,7 @@ func (c *Cmd) FirstCommands(mode string, privilege uint32) (cmds string) {
 	if m == nil {
 		return
 	}
-	for _, node := range m.Parser.Nodes {
+	for _, node := range *m.Parser.Nodes {
 		if privilege < node.Privilege {
 			continue
 		}

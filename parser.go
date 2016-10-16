@@ -15,9 +15,11 @@
 package cmd
 
 import (
-	"github.com/coreswitch/netutil"
+	"net"
 	"strconv"
 	"strings"
+
+	"github.com/coreswitch/netutil"
 )
 
 const (
@@ -61,6 +63,11 @@ func (n *Node) ParseArgSet(str string, param *Param) {
 	case NodeIPv4:
 		param.Args = append(param.Args, netutil.ParseIPv4(str))
 	case NodeIPv4Prefix:
+		prefix, _ := netutil.ParsePrefix(str)
+		param.Args = append(param.Args, prefix)
+	case NodeIPv6:
+		param.Args = append(param.Args, net.ParseIP(str))
+	case NodeIPv6Prefix:
 		prefix, _ := netutil.ParsePrefix(str)
 		param.Args = append(param.Args, prefix)
 	}

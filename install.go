@@ -132,7 +132,7 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 				node = NewNodeType(typ, lit)
 				parent.add(node)
 			}
-			if param.HelpIndex < len(param.Helps) {
+			if param.HelpIndex < len(param.Helps) && len(param.Helps[param.HelpIndex]) > 0 {
 				node.Help = param.Helps[param.HelpIndex]
 			}
 			if headline && head != nil {

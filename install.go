@@ -78,12 +78,19 @@ func NewNodeType(typ NodeType, lit string) *Node {
 
 	if typ == NodeDynamic {
 		lit = lit[1:]
-		p := strings.IndexByte(lit, ':')
-		if p < 0 {
+
+		dynamic := strings.Split(lit, ":")
+		if len(dynamic) == 0 {
 			return node
 		}
-		node.Module = lit[0:p]
-		node.Dynamic = lit[p+1 : len(lit)]
+		if len(dynamic) == 1 {
+			node.Module = dynamic[0]
+		}
+		if len(dynamic) > 1 {
+			node.Module = dynamic[0]
+			dynamic = dynamic[1:]
+			node.Dynamic = dynamic
+		}
 	}
 
 	return node

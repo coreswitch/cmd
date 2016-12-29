@@ -56,7 +56,7 @@ func isAlnumChar(c byte) bool {
 }
 
 func isDynamicChar(c byte) bool {
-	return isAlnumChar(c) || c == '-' || c == ':'
+	return isAlnumChar(c) || c == '-' || c == ':' || c == '$'
 }
 
 func isRangeChar(c byte) bool {

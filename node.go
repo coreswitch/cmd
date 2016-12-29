@@ -29,7 +29,7 @@ type Node struct {
 	Min       uint64
 	Max       uint64
 	Module    string
-	Dynamic   string
+	Dynamic   []string
 	Paren     bool
 }
 

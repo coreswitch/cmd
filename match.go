@@ -299,14 +299,14 @@ func (n *Node) MatchNode(str string, name string, state *MatchState) {
 }
 
 var (
-	DynamicFunc func(string, string) []string
+	DynamicFunc func(string, string, []string) []string
 )
 
-func (n *Node) MatchDynamic(str string, state *MatchState) {
+func (n *Node) MatchDynamic(line string, state *MatchState) {
 	if DynamicFunc != nil {
-		list := DynamicFunc(n.Module, n.Dynamic)
+		list := DynamicFunc(line, n.Module, n.Dynamic)
 		for _, name := range list {
-			n.MatchNode(str, name, state)
+			n.MatchNode(line, name, state)
 		}
 	}
 }

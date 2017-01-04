@@ -1,4 +1,4 @@
-// Copyright 2016 CoreSwitch
+// Copyright 2016, 2017 CoreSwitch
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -299,12 +299,12 @@ func (n *Node) MatchNode(str string, name string, state *MatchState) {
 }
 
 var (
-	DynamicFunc func(string, string, []string) []string
+	DynamicFunc func([]string, string, []string) []string
 )
 
-func (n *Node) MatchDynamic(line string, state *MatchState) {
+func (n *Node) MatchDynamic(line string, command []string, state *MatchState) {
 	if DynamicFunc != nil {
-		list := DynamicFunc(line, n.Module, n.Dynamic)
+		list := DynamicFunc(command, n.Module, n.Dynamic)
 		for _, name := range list {
 			n.MatchNode(line, name, state)
 		}

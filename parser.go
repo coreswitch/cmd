@@ -1,4 +1,4 @@
-// Copyright 2016 CoreSwitch
+// Copyright 2016, 2017 CoreSwitch
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ func (n *Node) ParseMatch(line string, param *Param, state *MatchState) {
 			continue
 		}
 		if node.Type == NodeDynamic {
-			node.MatchDynamic(line, state)
+			node.MatchDynamic(line, param.Command, state)
 		} else {
 			node.MatchNode(line, "", state)
 		}

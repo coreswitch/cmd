@@ -25,6 +25,7 @@ type MatchType int
 const (
 	MatchTypeNone MatchType = iota
 	MatchTypeIncomplete
+	MatchTypeLine
 	MatchTypeWord
 	MatchTypeIPv6Prefix
 	MatchTypeIPv6
@@ -70,6 +71,15 @@ func MatchWord(str string) (pos int, match MatchType) {
 		return pos, MatchTypeNone
 	}
 	return pos, MatchTypeWord
+}
+
+func MatchLine(str string) (pos int, match MatchType) {
+	for pos = 0; pos < len(str); pos++ {
+	}
+	if pos == 0 {
+		return pos, MatchTypeNone
+	}
+	return pos, MatchTypeLine
 }
 
 func MatchIPv4(str string) (pos int, match MatchType) {
@@ -261,6 +271,8 @@ func (n *Node) Match(str string, name string) (pos int, match MatchType) {
 		return MatchKeyword(str, name)
 	case NodeWord:
 		return MatchWord(str)
+	case NodeLine:
+		return MatchLine(str)
 	case NodeIPv4:
 		return MatchIPv4(str)
 	case NodeIPv4Prefix:

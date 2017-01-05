@@ -55,7 +55,7 @@ func (n *Node) ParseArgSet(str string, param *Param) {
 		if n.Paren {
 			param.Args = append(param.Args, n.Name)
 		}
-	case NodeWord, NodeDynamic:
+	case NodeWord, NodeDynamic, NodeLine:
 		param.Args = append(param.Args, str)
 	case NodeRange:
 		u, _ := strconv.ParseUint(str, 10, 64)

@@ -249,13 +249,22 @@ func MatchIPv6Prefix(line string) (pos int, match MatchType) {
 func MatchRange(line string, min, max uint64) (pos int, match MatchType) {
 	match = MatchTypeNone
 
-	val, ok := strconv.ParseUint(line, 10, 64)
+	for pos = 0; pos < len(line); pos++ {
+		if !isDigit(line, pos) {
+			break
+		}
+	}
+	if pos == 0 {
+		return
+	}
+	digistr := line[0:pos]
+
+	val, ok := strconv.ParseUint(digistr, 10, 64)
 	if ok != nil {
 		return
 	}
 
 	if min <= val && val <= max {
-		pos = len(line)
 		match = MatchTypeRange
 		return
 	}

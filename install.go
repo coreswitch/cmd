@@ -131,9 +131,9 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 			}
 			return typ
 		default:
-			if typ == NodeDynamic && !param.Dynamic {
-				typ = NodeWord
-			}
+			// if typ == NodeDynamic && !param.Dynamic {
+			// 	typ = NodeWord
+			// }
 			node := parent.lookup(typ, lit)
 			if node == nil {
 				node = NewNodeType(typ, lit)

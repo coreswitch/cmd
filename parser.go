@@ -44,7 +44,13 @@ func String2Interface(strs []string) []interface{} {
 func Interface2String(srcs []interface{}) []string {
 	dest := []string{}
 	for _, src := range srcs {
-		dest = append(dest, src.(string))
+		if ip, ok := src.(net.IP); ok {
+			dest = append(dest, ip.String())
+		} else if p, ok := src.(*netutil.Prefix); ok {
+			dest = append(dest, p.String())
+		} else {
+			dest = append(dest, src.(string))
+		}
 	}
 	return dest
 }

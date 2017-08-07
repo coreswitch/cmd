@@ -27,10 +27,10 @@ const (
 	MatchTypeIncomplete
 	MatchTypeLine
 	MatchTypeWord
-	MatchTypeIPv6Prefix
 	MatchTypeIPv6
-	MatchTypeIPv4Prefix
+	MatchTypeIPv6Prefix
 	MatchTypeIPv4
+	MatchTypeIPv4Prefix
 	MatchTypeRange
 	MatchTypePartial
 	MatchTypeExact
@@ -180,13 +180,14 @@ func MatchIPv6(line string) (pos int, match MatchType) {
 	for pos = 0; pos < len(line); pos++ {
 		p := strings.IndexByte("0123456789abcdefABCDEF:.%", line[pos])
 		if p < 0 {
-			return
+			break
 		}
 	}
-	if len(line) > IPV6_ADDRSTRLEN {
+	str := line[:pos]
+	if len(str) > IPV6_ADDRSTRLEN {
 		return
 	}
-	ip := net.ParseIP(line)
+	ip := net.ParseIP(str)
 	if ip == nil {
 		match = MatchTypeIncomplete
 		return
@@ -224,16 +225,16 @@ func MatchIPv6Prefix(line string) (pos int, match MatchType) {
 
 	pos = p + 1
 	for ; pos < len(line); pos++ {
-		if !isDigit(line, pos) {
-			match = MatchTypeNone
-			return
-		}
-		numsNotSeen = false
-		digitstr := line[p+1 : pos+1]
-		digit, err := strconv.Atoi(digitstr)
-		if err != nil || digit > 128 {
-			match = MatchTypeNone
-			return
+		if isDigit(line, pos) {
+			numsNotSeen = false
+			digitstr := line[p+1 : pos+1]
+			digit, err := strconv.Atoi(digitstr)
+			if err != nil || digit > 128 {
+				match = MatchTypeNone
+				return
+			}
+		} else {
+			break
 		}
 	}
 

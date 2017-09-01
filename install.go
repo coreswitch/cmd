@@ -29,6 +29,7 @@ type Param struct {
 	TrailingSpace bool
 	Args          []interface{}
 	Hook          Hook
+	Paren         bool
 }
 
 func (ns NodeSlice) setCallback(fn Callback) {
@@ -60,10 +61,11 @@ func (ns NodeSlice) add(node *Node) {
 	}
 }
 
-func NewNodeType(typ NodeType, lit string) *Node {
+func NewNodeType(typ NodeType, lit string, paren bool) *Node {
 	node := NewNode()
 	node.Type = typ
 	node.Name = lit
+	node.Paren = paren
 
 	if typ == NodeRange {
 		p := strings.IndexByte(lit, '-')
@@ -113,6 +115,7 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 		case nodeParenOpen, nodeBraceOpen, nodeCBraceOpen:
 			head = &NodeSlice{}
 			tail = &NodeSlice{}
+			param.Paren = true
 			for {
 				p := make(NodeSlice, len(parent), len(parent))
 				copy(p, parent)
@@ -121,6 +124,7 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 					break
 				}
 			}
+			param.Paren = false
 			parent = make(NodeSlice, len(*tail), len(*tail))
 			copy(parent, *tail)
 		case nodeParenClose, nodeBraceClose, nodeCBraceClose, nodeSeparator:
@@ -136,7 +140,7 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 			}
 			node := parent.lookup(typ, lit)
 			if node == nil {
-				node = NewNodeType(typ, lit)
+				node = NewNodeType(typ, lit, param.Paren)
 				parent.add(node)
 			}
 			if param.HelpIndex < len(param.Helps) && len(param.Helps[param.HelpIndex]) > 0 {

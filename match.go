@@ -177,6 +177,10 @@ func MatchIPv6(line string) (pos int, match MatchType) {
 	match = MatchTypeNone
 	const IPV6_ADDRSTRLEN = 46
 
+	if len(line) == 0 {
+		match = MatchTypeIncomplete
+		return
+	}
 	for pos = 0; pos < len(line); pos++ {
 		p := strings.IndexByte("0123456789abcdefABCDEF:.%", line[pos])
 		if p < 0 {
@@ -184,7 +188,7 @@ func MatchIPv6(line string) (pos int, match MatchType) {
 		}
 	}
 	str := line[:pos]
-	if len(str) > IPV6_ADDRSTRLEN {
+	if len(str) == 0 || len(str) > IPV6_ADDRSTRLEN {
 		return
 	}
 	ip := net.ParseIP(str)

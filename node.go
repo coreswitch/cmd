@@ -62,6 +62,7 @@ const (
 	nodeCBraceOpen
 	nodeCBraceClose
 	nodeSeparator
+	nodeAmpersand
 	nodeUnknown
 )
 

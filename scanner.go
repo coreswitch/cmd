@@ -179,6 +179,8 @@ func (s *ScannerLine) Scan() (typ NodeType, lit string) {
 		return nodeBraceClose, lit
 	case c == '|':
 		return nodeSeparator, lit
+	case c == '&':
+		return nodeAmpersand, lit
 	case c == ':':
 		s.r.UnreadByte()
 		return s.scanDynamic()

@@ -134,6 +134,10 @@ func Build(s Scanner, fn Callback, parent NodeSlice, head *NodeSlice, tail *Node
 				}
 			}
 			return typ
+		case nodeAmpersand:
+			for _, n := range parent {
+				parent.add(n)
+			}
 		default:
 			if typ == NodeDynamic && !param.Dynamic {
 				typ = NodeWord

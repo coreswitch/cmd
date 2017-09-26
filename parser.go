@@ -29,6 +29,21 @@ const (
 	ParseSuccess
 )
 
+func ParseResult2String(result int) string {
+	switch result {
+	case ParseNoMatch:
+		return "ParseNoMatch"
+	case ParseAmbiguous:
+		return "ParseAmbiguous"
+	case ParseIncomplete:
+		return "ParseIncomplete"
+	case ParseSuccess:
+		return "ParseSuccess"
+	default:
+		return "Unknown"
+	}
+}
+
 func NewParser() *Node {
 	return NewNode()
 }

@@ -33,9 +33,15 @@ func (s *ScannerCmd) Scan() (typ NodeType, lit string) {
 	lit = s.cmd[s.index]
 	s.index++
 
-	if len(lit) > 0 && lit[0] == '<' {
-		typ = NodeRange
-		return
+	if len(lit) > 0 {
+		switch lit[0] {
+		case '<':
+			typ = NodeRange
+			return
+		case '&':
+			typ = nodeAmpersand
+			return
+		}
 	}
 
 	typ, ok := string2NodeType[lit]

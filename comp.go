@@ -15,8 +15,10 @@
 package cmd
 
 type Comp struct {
-	Name string
-	Help string
+	Name     string
+	Help     string
+	Dir      bool
+	Additive bool
 }
 
 type CompSlice []*Comp

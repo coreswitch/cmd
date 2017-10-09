@@ -309,9 +309,9 @@ func (n *Node) MatchNode(str string, name string, state *MatchState) {
 	}
 	if state.complete {
 		if n.Type == NodeDynamic {
-			state.comps = append(state.comps, &Comp{name, ""})
+			state.comps = append(state.comps, &Comp{Name: name, Help: "", Dir: false, Additive: false})
 		} else {
-			state.comps = append(state.comps, &Comp{n.Name, n.Help})
+			state.comps = append(state.comps, &Comp{Name: n.Name, Help: n.Help, Dir: false, Additive: false})
 		}
 	}
 	if match > state.match {
